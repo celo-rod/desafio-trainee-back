@@ -1,0 +1,390 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Internal Project Manager API",
+        "description": "This API aims to manage internal projects within a company, allowing the creation, retrieval, updating, and removal of a project and its characteristics.",
+        "contact": {
+            "email": "marcelorj280@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/",
+            "description": "Test API"
+        }
+    ],
+    "paths": {
+        "/manager": {
+            "post": {
+                "summary": "Project creation",
+                "description": "This route will be responsible for registering a new project.",
+                "tags": ["Projects"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Project"
+                            },
+                            "examples": {
+                                "project": {
+                                    "value": {
+                                        "title": "Enhancement of Project Management Platform",
+                                        "description": "This internal project aims to enhance the project management platform of ABC Softwares company.",
+                                        "category": "Management Systems Development"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "get":{
+                "summary": "Gel all the projects",
+                "description": "This route will be responsible for retrieving all the projects registered in the system.",
+                "tags": ["Projects"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Project"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/manager/{projectSlug}": {
+            "get":{
+                "summary": "Get a project by its slug",
+                "description": "This route will be responsible for retrieving the information of a specific project by its slug.",
+                "tags": ["Projects"],
+                "parameters": [
+                    {
+                      "name": "projectSlug",
+                      "in": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Project"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/manager/{projectId}": {
+            "put": {
+                "summary": "Project modification",
+                "description": "This route will be responsible for modifying the information of an existing project in the system based on its ID.",
+                "tags": ["Projects"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                      "name": "projectId",
+                      "in": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Project"
+                            },
+                            "examples": {
+                                "project": {
+                                    "value": {
+                                        "title": "Automation of Customer Service Process",
+                                        "description": "In this internal project, XYZ Softwares aims to implement an automated customer service system to enhance the efficiency and quality of support provided.",
+                                        "category": "Customer Service Automation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "delete":{
+                "summary": "Project deletion",
+                "description": "This route will be responsible for deleting an existing project in the system based on its ID.",
+                "tags": ["Projects"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                      "name": "projectId",
+                      "in": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "summary": "User register",
+                "description": "This route will be responsible for registering a new user in the system.",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "Marcelo",
+                                        "email": "marcelo@email.com",
+                                        "password": "Abc123@"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "User login",
+                "description": "This route will be responsible for verifying the user's credentials and performing the login.",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "email": "marcelo@email.com",
+                                        "password": "Abc123@"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/forgot-password": {
+            "post": {
+                "summary": "Forgot password",
+                "description": "This route will be responsible for generating a token that allows a user who has forgotten their password to reset it.",
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                      "name": "body",
+                      "in": "body",
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "email": {
+                            "example": "marcelo@email.com"
+                          }
+                        }
+                      }
+                    }
+                  ]
+            },
+            "responses": {
+                "200": {
+                    "description": "OK"
+                },
+                "400": {
+                    "description": "Bad request"
+                },
+                "404": {
+                    "description": "Not Found"
+                },
+                "500": {
+                    "description": "Internal server error"
+                }
+            }
+        },
+        "/auth/reset-password": {
+            "post": {
+                "summary": "Reset user password",
+                "description": "This route will be responsible for validating the token generated by the 'forgot-password' route and then resetting the user's password to the desired new password.",
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                      "name": "body",
+                      "in": "body",
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "email": {
+                            "example": "marcelo@email.com"
+                          },
+                          "token": {
+                          },
+                          "newPassword": {
+                            "example": "@456Def"
+                          }
+                        }
+                      }
+                    }
+                  ]
+            },
+            "responses": {
+                "200": {
+                    "description": "OK"
+                },
+                "400": {
+                    "description": "Bad request"
+                },
+                "404": {
+                    "description": "Not Found"
+                },
+                "500": {
+                    "description": "Internal server error"
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Project": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Enhancement of Project Management Platform"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This internal project aims to enhance the project management platform of ABC Softwares company."
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "Management Systems Development"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Marcelo"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "marcelo@email.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "Abc123@"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
